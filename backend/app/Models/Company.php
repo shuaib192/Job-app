@@ -13,8 +13,8 @@ class Company extends Model
     {
         if (!$value) return null;
         $appUrl = config('app.url');
-        if (str_contains($value, '192.168.') || str_contains($value, '127.0.0.1')) {
-            return preg_replace('/http:\/\/.*:8000/', $appUrl, $value);
+        if (str_contains($value, '192.168.') || str_contains($value, '127.0.0.1') || str_contains($value, 'localhost')) {
+            return preg_replace('/^https?:\/\/[^\/]+(?:\:[0-9]+)?/', $appUrl, $value);
         }
         return $value;
     }

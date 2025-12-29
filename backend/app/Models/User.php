@@ -46,10 +46,11 @@ class User extends Authenticatable implements JWTSubject
     {
         if (!$value) return null;
         
-        // If the stored URL contains a local IP but we are in production, fix it
+        // If the stored URL contains a local IP or localhost, fix it for production
         $appUrl = config('app.url');
-        if (str_contains($value, '192.168.') || str_contains($value, '127.0.0.1')) {
-            return preg_replace('/http:\/\/.*:8000/', $appUrl, $value);
+        if (str_contains($value, '192.168.') || str_contains($value, '127.0.0.1') || str_contains($value, 'localhost')) {
+            // Replace everything before the first /storage/ or just the domain part
+            return preg_replace('/^https?:\/\/[^\/]+(?:\:[0-9]+)?/', $appUrl, $value);
         }
 
         return $value;
