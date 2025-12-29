@@ -1,0 +1,32 @@
+# NexaWork Root Gitignore
+
+# Backend
+backend/vendor/
+backend/node_modules/
+backend/.env
+backend/.env.*
+backend/storage/*.key
+backend/public/storage
+backend/public/build
+backend/public/hot
+backend/storage/framework/cache/data/*
+backend/storage/framework/sessions/*
+backend/storage/framework/views/*
+backend/storage/logs/*
+
+# Mobile
+mobile/node_modules/
+mobile/.expo/
+mobile/dist/
+mobile/npm-debug.log*
+mobile/yarn-debug.log*
+mobile/yarn-error.log*
+mobile/.env
+
+# Mac
+.DS_Store
+
+# Common
+.idea/
+.vscode/
+*.log
