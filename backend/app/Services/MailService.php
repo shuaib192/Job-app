@@ -15,6 +15,7 @@ class MailService
     {
         $settings = SystemSetting::all()->pluck('value', 'key');
 
+        Config::set('mail.default', 'smtp');
         Config::set('mail.mailers.smtp.host', $settings['mail_host'] ?? env('MAIL_HOST'));
         Config::set('mail.mailers.smtp.port', $settings['mail_port'] ?? env('MAIL_PORT'));
         Config::set('mail.mailers.smtp.username', $settings['mail_username'] ?? env('MAIL_USERNAME'));

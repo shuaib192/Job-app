@@ -21,6 +21,19 @@ class Post extends Model
     ];
 
     protected $appends = ['likes_count', 'comments_count', 'is_liked'];
+    
+    public function getImagesAttribute($value)
+    {
+        $images = json_decode($value, true) ?: [];
+        $appUrl = config('app.url');
+        
+        return array_map(function($url) use ($appUrl) {
+            if (str_contains($url, '192.168.') || str_contains($url, '127.0.0.1')) {
+                return preg_replace('/http:\/\/.*:8000/', $appUrl, $url);
+            }
+            return $url;
+        }, $images);
+    }
 
     public function getLikesCountAttribute()
     {

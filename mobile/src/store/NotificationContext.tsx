@@ -56,7 +56,17 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
             }
 
             // Dynamically get Project ID from app.json
-            const projectId = Constants.expoConfig?.extra?.eas?.projectId || Constants.expoConfig?.owner || 'f9d3b730-8d48-4f24-9b88-82540b0e5d95';
+            const projectId = Constants.expoConfig?.extra?.eas?.projectId;
+
+            if (!projectId) {
+                console.log('Push Info: No Project ID. Run "eas project:init" to enable notifications.');
+                return;
+            }
+
+            if (Platform.OS === 'android' && Constants.appOwnership === 'expo') {
+                console.log('Push Info: Android notifications require a Development Build (not Expo Go).');
+                return;
+            }
 
             console.log('Attempting to fetch Expo Push Token...');
             const tokenData = await Notifications.getExpoPushTokenAsync({
@@ -68,8 +78,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
             await client.post('/auth/push-token', { token: pushToken });
         } catch (err: any) {
-            console.log('Push Registration Silent Error:', err.message);
-            // We catch this to prevent the entire app from crashing if Expo Go lacks support or ID is invalid
+            console.log('Push Registration Info:', err.message);
         }
     };
 

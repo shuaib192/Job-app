@@ -42,6 +42,19 @@ class User extends Authenticatable implements JWTSubject
         'connection_status',
     ];
 
+    public function getAvatarAttribute($value)
+    {
+        if (!$value) return null;
+        
+        // If the stored URL contains a local IP but we are in production, fix it
+        $appUrl = config('app.url');
+        if (str_contains($value, '192.168.') || str_contains($value, '127.0.0.1')) {
+            return preg_replace('/http:\/\/.*:8000/', $appUrl, $value);
+        }
+
+        return $value;
+    }
+
     public function getConnectionStatusAttribute()
     {
         $authUserId = auth('api')->id();
