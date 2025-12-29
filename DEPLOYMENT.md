@@ -4,10 +4,17 @@ This guide outlines the steps to host the NexaWork backend and publish the mobil
 
 ## 1. Hosting the Backend (Laravel)
 
-### Recommended Hosting Providers
-- **DigitalOcean (Droplet)**: Affordable and powerful.
-- **Heroku**: easiest for beginners but more expensive.
-- **Shared Hosting (e.g. Namecheap/Bluehost)**: Only if they support SSH and Laravel.
+### Quick Hosting Steps (Hostinger / VPS)
+1. **GitHub Push**: Your code is now a Git repository. To push to GitHub:
+   - Create a new repo on GitHub.
+   - Run: `git remote add origin https://github.com/yourusername/nexawork.git`
+   - Run: `git branch -M main`
+   - Run: `git push -u origin main`
+2. **Hostinger (Shared)**:
+   - Zip the `backend` folder and upload it to `public_html`.
+   - Ensure the `.env` file is configured with your database and SMTP details.
+   - Set the PHP version to 8.1+ in the Hostinger panel.
+3. **Hostinger (VPS)**: Follow the Linux Server steps below for better performance.
 
 ### Deployment Steps (DigitalOcean Example)
 1. **Set up a Linux Server**: Create an Ubuntu 22.04 Droplet.

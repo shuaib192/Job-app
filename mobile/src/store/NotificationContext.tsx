@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import client from '../api/client';
 import { useAuth } from './AuthContext';
+import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import { Platform } from 'react-native';
@@ -10,6 +11,8 @@ Notifications.setNotificationHandler({
         shouldShowAlert: true,
         shouldPlaySound: true,
         shouldSetBadge: true,
+        shouldShowBanner: true,
+        shouldShowList: true,
     }),
 });
 
@@ -36,32 +39,37 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
     const registerForPushNotificationsAsync = async () => {
         if (!Device.isDevice) {
-            console.log('Must use physical device for Push Notifications');
+            console.log('Push Notifications require a physical device');
             return;
         }
-
-        const { status: existingStatus } = await Notifications.getPermissionsAsync();
-        let finalStatus = existingStatus;
-        if (existingStatus !== 'granted') {
-            const { status } = await Notifications.requestPermissionsAsync();
-            finalStatus = status;
-        }
-        if (finalStatus !== 'granted') {
-            console.log('Failed to get push token for push notification!');
-            return;
-        }
-
-        const tokenData = await Notifications.getExpoPushTokenAsync({
-            projectId: 'f9d3b730-8d48-4f24-9b88-82540b0e5d95' // Standard ID or user's project ID
-        });
-
-        const pushToken = tokenData.data;
-        console.log('Push Token:', pushToken);
 
         try {
-            await client.post('/push-token', { token: pushToken });
-        } catch (err) {
-            console.log('Error saving push token:', err);
+            const { status: existingStatus } = await Notifications.getPermissionsAsync();
+            let finalStatus = existingStatus;
+            if (existingStatus !== 'granted') {
+                const { status } = await Notifications.requestPermissionsAsync();
+                finalStatus = status;
+            }
+            if (finalStatus !== 'granted') {
+                console.log('Failed to get push token: permission not granted');
+                return;
+            }
+
+            // Dynamically get Project ID from app.json
+            const projectId = Constants.expoConfig?.extra?.eas?.projectId || Constants.expoConfig?.owner || 'f9d3b730-8d48-4f24-9b88-82540b0e5d95';
+
+            console.log('Attempting to fetch Expo Push Token...');
+            const tokenData = await Notifications.getExpoPushTokenAsync({
+                projectId: projectId
+            });
+
+            const pushToken = tokenData.data;
+            console.log('Push Token Obtained:', pushToken);
+
+            await client.post('/auth/push-token', { token: pushToken });
+        } catch (err: any) {
+            console.log('Push Registration Silent Error:', err.message);
+            // We catch this to prevent the entire app from crashing if Expo Go lacks support or ID is invalid
         }
     };
 
