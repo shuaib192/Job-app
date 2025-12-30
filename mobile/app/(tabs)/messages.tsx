@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, RefreshControl, Image } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, RefreshControl, Image as RNImage } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { theme } from '../../src/theme';
@@ -58,9 +58,9 @@ export default function MessagesScreen() {
             >
                 <View style={styles.avatarContainer}>
                     {otherUser?.avatar ? (
-                        <Image source={{ uri: otherUser.avatar }} style={styles.avatar} />
+                        <RNImage source={{ uri: otherUser.avatar }} style={styles.avatar} />
                     ) : otherUser?.profile?.avatar ? (
-                        <Image source={{ uri: otherUser.profile.avatar }} style={styles.avatar} />
+                        <RNImage source={{ uri: otherUser.profile.avatar }} style={styles.avatar} />
                     ) : (
                         <Text style={styles.avatarText}>{otherUser?.name?.[0] || '?'}</Text>
                     )}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, Alert, Linking, Image } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, Alert, Linking, Image as RNImage } from 'react-native';
 import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { theme } from '../../../src/theme';
@@ -56,9 +56,9 @@ export default function JobApplicationsScreen() {
                     onPress={() => router.push(`/profile/${item.user_id}`)}
                 >
                     {item.user?.avatar ? (
-                        <Image source={{ uri: item.user.avatar }} style={styles.avatar} />
+                        <RNImage source={{ uri: item.user.avatar }} style={styles.avatar} />
                     ) : item.user?.profile?.avatar ? (
-                        <Image source={{ uri: item.user.profile.avatar }} style={styles.avatar} />
+                        <RNImage source={{ uri: item.user.profile.avatar }} style={styles.avatar} />
                     ) : (
                         <View style={styles.avatarPlaceholder}>
                             <Text style={styles.avatarText}>{item.user.name?.[0] || '?'}</Text>

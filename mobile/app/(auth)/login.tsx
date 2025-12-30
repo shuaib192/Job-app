@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView, ActivityIndicator, Dimensions } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView, ActivityIndicator, Dimensions, Image as RNImage } from 'react-native';
 import { useRouter, Link } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { theme } from '../../src/theme';
@@ -75,11 +75,15 @@ export default function LoginScreen() {
 
                     {/* Welcome Text */}
                     <View style={styles.welcomeSection}>
+                        <RNImage
+                            source={require('../../assets/nobg-mainlogo.png')}
+                            style={styles.logoImage}
+                            resizeMode="contain"
+                        />
                         <Text style={styles.title}>Welcome Back</Text>
                         <Text style={styles.subtitle}>Sign in to continue your professional journey</Text>
                     </View>
 
-                    {/* Form */}
                     <View style={styles.form}>
                         {error ? (
                             <View style={styles.errorContainer}>
@@ -190,16 +194,24 @@ const styles = StyleSheet.create({
         ...theme.shadows.sm,
     },
     welcomeSection: {
-        marginBottom: theme.spacing.xxl,
+        marginBottom: theme.spacing.xl,
+        alignItems: 'center',
+    },
+    logoImage: {
+        width: 200,
+        height: 70,
+        marginBottom: theme.spacing.lg,
     },
     title: {
         ...theme.typography.h1,
         color: theme.colors.text,
         marginBottom: theme.spacing.sm,
+        textAlign: 'center',
     },
     subtitle: {
         ...theme.typography.body,
         color: theme.colors.textSecondary,
+        textAlign: 'center',
     },
     form: {
         gap: theme.spacing.lg,

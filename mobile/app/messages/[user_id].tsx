@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity, ActivityIndicator, KeyboardAvoidingView, Platform, Image, Alert, Linking } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity, ActivityIndicator, KeyboardAvoidingView, Platform, Image as RNImage, Alert, Linking } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
 import { theme } from '../../src/theme';
@@ -272,7 +272,7 @@ export default function ChatScreen() {
                                     setViewerVisible(true);
                                 }}
                             >
-                                <Image source={{ uri: item.image }} style={styles.messageImage} resizeMode="cover" />
+                                <RNImage source={{ uri: item.image }} style={styles.messageImage} resizeMode="cover" />
                                 <View style={styles.imageOverlay}>
                                     <Text style={styles.tapToView}>Tap to view</Text>
                                 </View>
@@ -404,7 +404,7 @@ export default function ChatScreen() {
                     <View style={styles.inputWrapper}>
                         {selectedImage && (
                             <View style={styles.previewContainer}>
-                                <Image source={{ uri: selectedImage }} style={styles.previewImage} />
+                                <RNImage source={{ uri: selectedImage }} style={styles.previewImage} />
                                 <TouchableOpacity style={styles.removePreview} onPress={() => setSelectedImage(null)}>
                                     <X size={16} color={theme.colors.white} />
                                 </TouchableOpacity>

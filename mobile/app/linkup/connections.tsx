@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, RefreshControl, Image } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, RefreshControl, Image as RNImage } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, Stack } from 'expo-router';
 import { theme } from '../../src/theme';
@@ -43,7 +43,7 @@ export default function ConnectionsScreen() {
         >
             <View style={styles.avatarWrapper}>
                 {item.avatar ? (
-                    <Image source={{ uri: item.avatar }} style={styles.avatar} />
+                    <RNImage source={{ uri: item.avatar }} style={styles.avatar} />
                 ) : (
                     <View style={styles.avatarPlaceholder}>
                         <Text style={styles.avatarInitial}>{item.name?.[0] || 'U'}</Text>

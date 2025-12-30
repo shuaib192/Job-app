@@ -1,13 +1,10 @@
-/**
- * Code by shuaibu abdulmumini (08122598372 / 07049906420) shuaibabdul192@gmail.com
- */
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions, StatusBar } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, StatusBar, Image as RNImage, ImageBackground } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { theme } from '../src/theme';
-import { ArrowRight, Briefcase, Users, Shield } from 'lucide-react-native';
+import { ArrowRight, Briefcase, Users, Shield, Sparkles } from 'lucide-react-native';
 
 const { width, height } = Dimensions.get('window');
 
@@ -15,79 +12,100 @@ export default function WelcomeScreen() {
     const router = useRouter();
 
     const features = [
-        { icon: <Briefcase size={20} color={theme.colors.primary} />, text: 'Job Matching' },
-        { icon: <Users size={20} color={theme.colors.primary} />, text: 'Linkup Feed' },
-        { icon: <Shield size={20} color={theme.colors.primary} />, text: 'Verified Profiles' },
+        { icon: <Briefcase size={20} color={theme.colors.primary} />, text: 'Job Matching', desc: 'AI-driven matches' },
+        { icon: <Users size={20} color={theme.colors.primary} />, text: 'Linkup Feed', desc: 'Professional network' },
+        { icon: <Shield size={20} color={theme.colors.primary} />, text: 'Verified', desc: 'Secure profiles' },
     ];
 
     return (
         <View style={styles.container}>
             <StatusBar barStyle="light-content" />
 
-            {/* Hero Section with Gradient */}
-            <LinearGradient
-                colors={[theme.colors.gradientStart, theme.colors.gradientEnd]}
-                style={styles.heroSection}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
+            <ImageBackground
+                source={require('../assets/welcome-bg.png')}
+                style={styles.backgroundImage}
+                resizeMode="cover"
             >
-                <SafeAreaView edges={['top']}>
-                    <View style={styles.heroContent}>
-                        <View style={styles.logoContainer}>
-                            <View style={styles.logoIcon}>
-                                <Briefcase size={28} color={theme.colors.primary} />
+                <LinearGradient
+                    colors={['rgba(15, 23, 42, 0.4)', 'rgba(15, 23, 42, 0.95)']}
+                    style={styles.gradient}
+                >
+                    <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
+                        <View style={styles.content}>
+                            {/* Logo Section */}
+                            <View style={styles.header}>
+                                <RNImage
+                                    source={require('../assets/nobg-mainlogo.png')}
+                                    style={styles.logo}
+                                    resizeMode="contain"
+                                />
+                                <View style={styles.badge}>
+                                    <Sparkles size={12} color={theme.colors.warning} />
+                                    <Text style={styles.badgeText}>PREMIUM</Text>
+                                </View>
                             </View>
-                            <Text style={styles.logoText}>NexaWork</Text>
+
+                            {/* Hero Text */}
+                            <View style={styles.heroSection}>
+                                <Text style={styles.tagline}>NEXA WORK</Text>
+                                <Text style={styles.title}>
+                                    Elevate Your{'\n'}<Text style={styles.titleHighlight}>Career</Text> Today.
+                                </Text>
+                                <Text style={styles.subtitle}>
+                                    The next generation of professional networking. Discover openings and linkup with the best talent globally.
+                                </Text>
+                            </View>
+
+                            {/* Features Grid */}
+                            <View style={styles.featuresContainer}>
+                                {features.map((feature, index) => (
+                                    <View key={index} style={styles.featureCard}>
+                                        <View style={styles.featureIconWrapper}>
+                                            {feature.icon}
+                                        </View>
+                                        <Text style={styles.featureTitle}>{feature.text}</Text>
+                                    </View>
+                                ))}
+                            </View>
+
+                            <View style={styles.spacer} />
+
+                            {/* Action Area */}
+                            <View style={styles.actions}>
+                                <TouchableOpacity
+                                    style={styles.primaryButton}
+                                    onPress={() => router.push('/(auth)/register')}
+                                    activeOpacity={0.9}
+                                >
+                                    <LinearGradient
+                                        colors={[theme.colors.primary, '#4F46E5']}
+                                        style={styles.buttonGradient}
+                                        start={{ x: 0, y: 0 }}
+                                        end={{ x: 1, y: 0 }}
+                                    >
+                                        <Text style={styles.primaryButtonText}>Get Started</Text>
+                                        <ArrowRight size={20} color={theme.colors.white} />
+                                    </LinearGradient>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                    style={styles.secondaryButton}
+                                    onPress={() => router.push('/(auth)/login')}
+                                    activeOpacity={0.7}
+                                >
+                                    <Text style={styles.secondaryButtonText}>
+                                        Already have an account? <Text style={styles.loginText}>Sign In</Text>
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+
+                            <Text style={styles.footerNote}>
+                                Trusted by 10k+ professionals worldwide
+                            </Text>
                         </View>
-
-                        <Text style={styles.heroTitle}>
-                            Professional{'\n'}Networking,{'\n'}Simplified.
-                        </Text>
-
-                        <Text style={styles.heroSubtitle}>
-                            Discover opportunities, linkup with top talent, and grow your career.
-                        </Text>
-                    </View>
-                </SafeAreaView>
-            </LinearGradient>
-
-            {/* Bottom Section */}
-            <View style={styles.bottomSection}>
-                {/* Features */}
-                <View style={styles.featuresContainer}>
-                    {features.map((feature, index) => (
-                        <View key={index} style={styles.featureItem}>
-                            <View style={styles.featureIcon}>{feature.icon}</View>
-                            <Text style={styles.featureText}>{feature.text}</Text>
-                        </View>
-                    ))}
-                </View>
-
-                {/* Action Buttons */}
-                <View style={styles.actionsContainer}>
-                    <TouchableOpacity
-                        style={styles.primaryButton}
-                        onPress={() => router.push('/(auth)/register')}
-                        activeOpacity={0.9}
-                    >
-                        <Text style={styles.primaryButtonText}>Create Account</Text>
-                        <ArrowRight size={20} color={theme.colors.white} />
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        style={styles.secondaryButton}
-                        onPress={() => router.push('/(auth)/login')}
-                        activeOpacity={0.8}
-                    >
-                        <Text style={styles.secondaryButtonText}>I already have an account</Text>
-                    </TouchableOpacity>
-                </View>
-
-                {/* Footer */}
-                <Text style={styles.footerText}>
-                    By continuing, you agree to our Terms & Privacy Policy
-                </Text>
-            </View>
+                    </SafeAreaView>
+                </LinearGradient>
+            </ImageBackground>
         </View>
     );
 }
@@ -95,109 +113,154 @@ export default function WelcomeScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: theme.colors.background,
+        backgroundColor: '#0F172A',
     },
-    heroSection: {
-        height: height * 0.55,
-        borderBottomLeftRadius: 40,
-        borderBottomRightRadius: 40,
-    },
-    heroContent: {
+    backgroundImage: {
         flex: 1,
-        paddingHorizontal: theme.spacing.lg,
-        paddingTop: theme.spacing.xxl,
+        width: '100%',
+        height: '100%',
     },
-    logoContainer: {
+    gradient: {
+        flex: 1,
+    },
+    safeArea: {
+        flex: 1,
+    },
+    content: {
+        flex: 1,
+        paddingHorizontal: 28,
+        paddingTop: 20,
+        paddingBottom: 20,
+    },
+    header: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: theme.spacing.xxl,
-    },
-    logoIcon: {
-        width: 44,
-        height: 44,
-        borderRadius: 12,
-        backgroundColor: theme.colors.white,
-        alignItems: 'center',
-        justifyContent: 'center',
-        ...theme.shadows.md,
-    },
-    logoText: {
-        marginLeft: theme.spacing.sm,
-        fontSize: 24,
-        fontWeight: '700',
-        color: theme.colors.white,
-        letterSpacing: -0.5,
-    },
-    heroTitle: {
-        ...theme.typography.display,
-        color: theme.colors.white,
-        marginBottom: theme.spacing.md,
-    },
-    heroSubtitle: {
-        ...theme.typography.body,
-        color: 'rgba(255,255,255,0.85)',
-        maxWidth: '85%',
-    },
-    bottomSection: {
-        flex: 1,
-        paddingHorizontal: theme.spacing.lg,
-        paddingTop: theme.spacing.xl,
         justifyContent: 'space-between',
-        paddingBottom: theme.spacing.xl,
+        marginBottom: 40,
+    },
+    logo: {
+        width: 200,
+        height: 70,
+        marginLeft: -10,
+    },
+    badge: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+        paddingHorizontal: 12,
+        paddingVertical: 6,
+        borderRadius: 20,
+        gap: 6,
+        borderWidth: 1,
+        borderColor: 'rgba(255, 255, 255, 0.2)',
+    },
+    badgeText: {
+        color: theme.colors.white,
+        fontSize: 10,
+        fontWeight: '800',
+        letterSpacing: 1,
+    },
+    heroSection: {
+        marginBottom: 35,
+    },
+    tagline: {
+        color: theme.colors.primary,
+        fontSize: 14,
+        fontWeight: '800',
+        letterSpacing: 4,
+        marginBottom: 12,
+    },
+    title: {
+        fontSize: 42,
+        fontWeight: '900',
+        color: theme.colors.white,
+        lineHeight: 50,
+        letterSpacing: -1,
+    },
+    titleHighlight: {
+        color: theme.colors.primary,
+    },
+    subtitle: {
+        fontSize: 16,
+        color: 'rgba(255, 255, 255, 0.7)',
+        marginTop: 15,
+        lineHeight: 24,
+        maxWidth: '90%',
     },
     featuresContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-around',
-        marginBottom: theme.spacing.xl,
+        gap: 12,
+        marginBottom: 20,
     },
-    featureItem: {
-        alignItems: 'center',
+    featureCard: {
         flex: 1,
+        backgroundColor: 'rgba(255, 255, 255, 0.05)',
+        padding: 16,
+        borderRadius: 20,
+        borderWidth: 1,
+        borderColor: 'rgba(255, 255, 255, 0.1)',
+        alignItems: 'center',
     },
-    featureIcon: {
-        width: 48,
-        height: 48,
-        borderRadius: 14,
-        backgroundColor: theme.colors.primaryLight,
+    featureIconWrapper: {
+        width: 40,
+        height: 40,
+        borderRadius: 12,
+        backgroundColor: 'rgba(99, 102, 241, 0.15)',
         alignItems: 'center',
         justifyContent: 'center',
-        marginBottom: theme.spacing.sm,
+        marginBottom: 8,
     },
-    featureText: {
-        ...theme.typography.smallMedium,
-        color: theme.colors.textSecondary,
+    featureTitle: {
+        color: theme.colors.white,
+        fontSize: 11,
+        fontWeight: '700',
         textAlign: 'center',
     },
-    actionsContainer: {
-        gap: theme.spacing.md,
+    spacer: {
+        flex: 1,
+    },
+    actions: {
+        gap: 16,
+        marginBottom: 20,
     },
     primaryButton: {
-        backgroundColor: theme.colors.primary,
+        width: '100%',
+        height: 64,
+        borderRadius: 22,
+        overflow: 'hidden',
+        ...theme.shadows.lg,
+    },
+    buttonGradient: {
+        flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        paddingVertical: theme.spacing.md,
-        paddingHorizontal: theme.spacing.xl,
-        borderRadius: theme.borderRadius.lg,
-        gap: theme.spacing.sm,
-        ...theme.shadows.md,
+        gap: 10,
     },
     primaryButtonText: {
-        ...theme.typography.button,
         color: theme.colors.white,
+        fontSize: 18,
+        fontWeight: '800',
     },
     secondaryButton: {
+        width: '100%',
+        height: 50,
         alignItems: 'center',
         justifyContent: 'center',
-        paddingVertical: theme.spacing.md,
     },
     secondaryButtonText: {
-        ...theme.typography.captionMedium,
-        color: theme.colors.primary,
+        color: 'rgba(255, 255, 255, 0.6)',
+        fontSize: 15,
+        fontWeight: '500',
     },
-    footerText: {
-        ...theme.typography.small,
-        color: theme.colors.textMuted,
+    loginText: {
+        color: theme.colors.white,
+        fontWeight: '800',
+    },
+    footerNote: {
         textAlign: 'center',
+        color: 'rgba(255, 255, 255, 0.4)',
+        fontSize: 12,
+        fontWeight: '500',
     },
 });

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Alert, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Alert, Image as RNImage } from 'react-native';
 
 
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -106,7 +106,7 @@ export default function PublicProfileScreen() {
                     {/* Header Card */}
                     <View style={styles.headerCard}>
                         {profile?.avatar ? (
-                            <Image
+                            <RNImage
                                 source={{ uri: profile.avatar }}
                                 style={styles.avatarImage}
                             />

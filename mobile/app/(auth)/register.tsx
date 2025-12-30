@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView, ActivityIndicator, Dimensions } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView, ActivityIndicator, Dimensions, Image as RNImage } from 'react-native';
 import { useRouter, Link } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { theme } from '../../src/theme';
@@ -355,6 +355,11 @@ export default function RegisterScreen() {
 
                     {/* Title */}
                     <View style={styles.titleSection}>
+                        <RNImage
+                            source={require('../../assets/nobg-mainlogo.png')}
+                            style={styles.logoImage}
+                            resizeMode="contain"
+                        />
                         <Text style={styles.title}>{getStepTitle()}</Text>
                         <Text style={styles.subtitle}>{getStepSubtitle()}</Text>
                     </View>
@@ -490,15 +495,23 @@ const styles = StyleSheet.create({
     },
     titleSection: {
         marginBottom: theme.spacing.xl,
+        alignItems: 'center',
+    },
+    logoImage: {
+        width: 180,
+        height: 60,
+        marginBottom: theme.spacing.lg,
     },
     title: {
         ...theme.typography.h1,
         color: theme.colors.text,
         marginBottom: theme.spacing.xs,
+        textAlign: 'center',
     },
     subtitle: {
         ...theme.typography.body,
         color: theme.colors.textSecondary,
+        textAlign: 'center',
     },
     form: {
         gap: theme.spacing.lg,

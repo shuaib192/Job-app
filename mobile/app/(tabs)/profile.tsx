@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Alert, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Alert, Image as RNImage } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { theme } from '../../src/theme';
@@ -189,9 +189,9 @@ export default function ProfileScreen() {
 
                     <TouchableOpacity style={styles.avatarContainer} onPress={pickProfileImage}>
                         {avatarUrl || user?.avatar ? (
-                            <Image source={{ uri: avatarUrl || user?.avatar }} style={styles.avatarImage} />
+                            <RNImage source={{ uri: avatarUrl || user?.avatar }} style={styles.avatarImage} />
                         ) : profile?.profile?.avatar ? (
-                            <Image source={{ uri: profile.profile.avatar }} style={styles.avatarImage} />
+                            <RNImage source={{ uri: profile.profile.avatar }} style={styles.avatarImage} />
                         ) : (
                             <Text style={styles.avatarText}>{user?.name?.[0] || 'U'}</Text>
                         )}
@@ -262,7 +262,7 @@ export default function ProfileScreen() {
                         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.galleryScroll}>
                             {gallery.map((item) => (
                                 <View key={item.id} style={styles.galleryItem}>
-                                    <Image source={{ uri: item.image_url }} style={styles.galleryImage} />
+                                    <RNImage source={{ uri: item.image_url }} style={styles.galleryImage} />
                                     <TouchableOpacity
                                         style={styles.deleteGalleryBtn}
                                         onPress={() => deleteGalleryItem(item.id)}

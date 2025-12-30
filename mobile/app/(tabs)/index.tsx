@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback, memo, useMemo, useRef } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, RefreshControl, TextInput, Image, Dimensions, Keyboard, ScrollView, Platform } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, RefreshControl, TextInput, Image as RNImage, Dimensions, Keyboard, ScrollView, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, Stack, useFocusEffect } from 'expo-router';
 import { theme } from '../../src/theme';
@@ -123,9 +123,9 @@ export default function JobsScreen() {
                 <TouchableOpacity onPress={() => router.push('/(tabs)/profile')}>
                     <View style={styles.avatarWrapper}>
                         {user?.avatar ? (
-                            <Image source={{ uri: user.avatar }} style={styles.avatarImage} />
+                            <RNImage source={{ uri: user.avatar }} style={styles.avatarImage} />
                         ) : user?.profile?.avatar ? (
-                            <Image source={{ uri: user.profile.avatar }} style={styles.avatarImage} />
+                            <RNImage source={{ uri: user.profile.avatar }} style={styles.avatarImage} />
                         ) : (
                             <View style={styles.avatarPlaceholder}>
                                 <Text style={styles.avatarInitial}>{user?.name?.[0] || 'U'}</Text>
@@ -206,7 +206,7 @@ export default function JobsScreen() {
                                 <View style={styles.featuredTop}>
                                     <View style={styles.featuredLogo}>
                                         {(item.employer?.avatar || item.employer?.profile?.avatar) ? (
-                                            <Image
+                                            <RNImage
                                                 source={{ uri: item.employer.avatar || item.employer.profile.avatar }}
                                                 style={styles.featuredLogoImage}
                                             />
@@ -248,7 +248,7 @@ export default function JobsScreen() {
                 <View style={styles.jobCardTop}>
                     <View style={styles.jobLogo}>
                         {(item.employer?.avatar || item.employer?.profile?.avatar) ? (
-                            <Image
+                            <RNImage
                                 source={{ uri: item.employer.avatar || item.employer.profile.avatar }}
                                 style={styles.jobLogoImage}
                             />

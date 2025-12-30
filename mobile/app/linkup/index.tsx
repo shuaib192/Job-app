@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback, memo } from 'react';
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity, ActivityIndicator, Animated, PanResponder, Image, Modal, TextInput, Keyboard } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity, ActivityIndicator, Animated, PanResponder, Image as RNImage, Modal, TextInput, Keyboard } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, Stack } from 'expo-router';
 import { theme } from '../../src/theme';
@@ -178,7 +178,7 @@ export default function LinkupScreen() {
         const cardContent = (
             <View style={styles.cardContent}>
                 {item.avatar ? (
-                    <Image source={{ uri: item.avatar }} style={StyleSheet.absoluteFill} resizeMode="cover" />
+                    <RNImage source={{ uri: item.avatar }} style={StyleSheet.absoluteFill} resizeMode="cover" />
                 ) : (
                     <View style={[StyleSheet.absoluteFill, { backgroundColor: '#E2E8F0' }]}>
                         <View style={styles.placeholderAvatar}>
@@ -298,8 +298,8 @@ export default function LinkupScreen() {
                             <Text style={styles.matchTitle}>Matched!</Text>
                             <Text style={styles.matchSubtitle}>You and {matchedUser?.name} linked up.</Text>
                             <View style={styles.matchAvatars}>
-                                {user?.avatar && <Image source={{ uri: user.avatar }} style={styles.matchAvatar} />}
-                                {matchedUser?.avatar && <Image source={{ uri: matchedUser.avatar }} style={styles.matchAvatar} />}
+                                {user?.avatar && <RNImage source={{ uri: user.avatar }} style={styles.matchAvatar} />}
+                                {matchedUser?.avatar && <RNImage source={{ uri: matchedUser.avatar }} style={styles.matchAvatar} />}
                             </View>
                             <TouchableOpacity style={styles.messageButton} onPress={() => { setShowMatchModal(false); router.push(`/messages/${matchedUser?.id}`); }}>
                                 <Text style={styles.messageButtonText}>Chat Now</Text>
@@ -364,5 +364,14 @@ const styles = StyleSheet.create({
     matchAvatar: { width: 100, height: 100, borderRadius: 50, borderWidth: 4, borderColor: '#fff' },
     messageButton: { width: '100%', backgroundColor: theme.colors.primary, paddingVertical: 18, borderRadius: 20, alignItems: 'center', marginBottom: 15 },
     messageButtonText: { color: '#fff', fontSize: 18, fontWeight: 'bold' },
-    keepSwipingText: { color: '#94A3B8', fontWeight: '600' },
+    searchIcon: { marginRight: 10 },
+    emptyIcon: {
+        width: 80,
+        height: 80,
+        borderRadius: 40,
+        backgroundColor: theme.colors.primaryLight,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 20,
+    },
 });

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback, memo } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, RefreshControl, TextInput, Image, Dimensions, Keyboard, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, RefreshControl, TextInput, Image as RNImage, Dimensions, Keyboard, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, Stack } from 'expo-router';
 import { theme } from '../../src/theme';
@@ -154,9 +154,9 @@ export default function NetworkScreen() {
         >
             <View style={styles.imageWrapper}>
                 {item.avatar ? (
-                    <Image source={{ uri: item.avatar }} style={styles.personImage} />
+                    <RNImage source={{ uri: item.avatar }} style={styles.personImage} />
                 ) : item.profile?.avatar ? (
-                    <Image source={{ uri: item.profile.avatar }} style={styles.personImage} />
+                    <RNImage source={{ uri: item.profile.avatar }} style={styles.personImage} />
                 ) : (
                     <View style={styles.personPlaceholder}>
                         <Text style={styles.personInitial}>{item.name?.[0] || 'U'}</Text>

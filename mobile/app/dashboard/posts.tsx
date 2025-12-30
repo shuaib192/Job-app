@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, Alert, Image } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, Alert, Image as RNImage } from 'react-native';
 import { theme } from '../../src/theme';
 import client from '../../src/api/client';
 import { Trash2, Heart, MessageSquare } from 'lucide-react-native';
@@ -61,7 +61,7 @@ export default function MyPostsScreen() {
             </View>
             <Text style={styles.content}>{item.content}</Text>
             {item.images && item.images.length > 0 && (
-                <Image source={{ uri: item.images[0] }} style={styles.image} />
+                <RNImage source={{ uri: item.images[0] }} style={styles.image} />
             )}
             <View style={styles.stats}>
                 <View style={styles.stat}>
