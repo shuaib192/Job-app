@@ -115,7 +115,17 @@ class AiController extends Controller
 
         if (!$response->successful()) {
             \Log::error('Gemini API Error: ' . $response->body());
-            throw new \Exception('Gemini API error: ' . $response->status());
+            $status = $response->status();
+            
+            if ($status === 429) {
+                throw new \Exception('Rate limit reached (Error 429). The Google Gemini free tier is limited. Please wait a minute or upgrade to a Pay-as-you-go plan in Google AI Studio.');
+            }
+            
+            if ($status === 404) {
+                throw new \Exception("Model Not Found (Error 404). The AI model '{$model}' might be incorrect. Please check your AI Settings in the Admin Panel.");
+            }
+            
+            throw new \Exception('Gemini API error: ' . $status);
         }
 
         $data = $response->json();
