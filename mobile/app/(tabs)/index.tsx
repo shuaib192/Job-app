@@ -56,7 +56,21 @@ export default function JobsScreen() {
     const [error, setError] = useState<string | null>(null);
     const [activeQuery, setActiveQuery] = useState('');
     const [showScrollTop, setShowScrollTop] = useState(false);
+    const [aiConfig, setAiConfig] = useState<any>(null);
     const flatListRef = useRef<FlatList>(null);
+
+    useEffect(() => {
+        fetchAiConfig();
+    }, []);
+
+    const fetchAiConfig = async () => {
+        try {
+            const response = await client.get('/ai/config');
+            setAiConfig(response.data);
+        } catch (err) {
+            console.log('AI config fetch error:', err);
+        }
+    };
 
     const fetchJobs = useCallback(async (query = '') => {
         if (authLoading) return;
@@ -116,8 +130,18 @@ export default function JobsScreen() {
     const renderHeader = () => (
         <View style={styles.headerContainer}>
             <View style={styles.headerTop}>
-                <View>
-                    <Text style={styles.greeting}>Hello, {user?.name?.split(' ')[0] || 'Member'} 👋</Text>
+                <View style={{ flex: 1 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                        <Text style={styles.greeting}>Hello, {user?.name?.split(' ')[0] || 'Member'} 👋</Text>
+                        {aiConfig?.enabled && (
+                            <TouchableOpacity
+                                style={styles.aiHeaderBtn}
+                                onPress={() => router.push('/messages/ai')}
+                            >
+                                <Sparkles size={18} color={theme.colors.primary} />
+                            </TouchableOpacity>
+                        )}
+                    </View>
                     <Text style={styles.subtitle}>Let's find your next opportunity</Text>
                 </View>
                 <TouchableOpacity onPress={() => router.push('/(tabs)/profile')}>
@@ -363,6 +387,13 @@ const styles = StyleSheet.create({
     headerContainer: { paddingHorizontal: 20, paddingTop: 10, paddingBottom: 20 },
     headerTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 },
     greeting: { fontSize: 24, fontWeight: '800', color: theme.colors.text },
+    aiHeaderBtn: {
+        backgroundColor: '#EEF2FF',
+        padding: 6,
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#E0E7FF',
+    },
     subtitle: { fontSize: 14, color: theme.colors.textSecondary, marginTop: 2 },
     avatarWrapper: { position: 'relative' },
     avatarImage: { width: 48, height: 48, borderRadius: 24, borderWidth: 2, borderColor: '#fff' },

@@ -267,11 +267,13 @@ export default function ChatScreen() {
                     <View style={styles.messageContentContainer}>
                         {!isMe && (
                             <View style={styles.bubbleAvatarContainer}>
-                                {otherUser?.avatar ? (
-                                    <RNImage source={{ uri: otherUser.avatar }} style={styles.bubbleAvatar} />
+                                {otherUser?.avatar || item.sender?.avatar ? (
+                                    <RNImage source={{ uri: otherUser?.avatar || item.sender?.avatar }} style={styles.bubbleAvatar} />
                                 ) : (
                                     <View style={styles.bubbleAvatarPlaceholder}>
-                                        <Text style={styles.bubbleAvatarText}>{otherUser?.name?.[0] || '?'}</Text>
+                                        <Text style={styles.bubbleAvatarText}>
+                                            {(otherUser?.name || item.sender?.name)?.[0] || '?'}
+                                        </Text>
                                     </View>
                                 )}
                             </View>
@@ -317,8 +319,8 @@ export default function ChatScreen() {
                                     >
                                         <FileText size={24} color={isMe ? theme.colors.white : theme.colors.primary} />
                                         <View style={styles.fileInfo}>
-                                            <Text style={[styles.fileText, isMe && { color: theme.colors.white }]}>Document</Text>
-                                            <Text style={[styles.fileTap, isMe && { color: 'rgba(255,255,255,0.7)' }]}>Tap to download</Text>
+                                            <Text style={[styles.fileText, isMe && { color: theme.colors.white }]} numberOfLines={1}>Document</Text>
+                                            <Text style={[styles.fileTap, isMe && { color: 'rgba(255,255,255,0.7)' }]} numberOfLines={1}>Tap to download</Text>
                                         </View>
                                         <Download size={16} color={isMe ? 'rgba(255,255,255,0.7)' : theme.colors.textMuted} />
                                     </TouchableOpacity>
@@ -562,6 +564,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'flex-end',
         maxWidth: '85%',
+    },
+    fileInfo: {
+        flex: 1,
+        minWidth: 120,
     },
     bubbleAvatarContainer: {
         width: 32,
