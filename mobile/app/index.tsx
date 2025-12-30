@@ -12,9 +12,9 @@ export default function WelcomeScreen() {
     const router = useRouter();
 
     const features = [
-        { icon: <Briefcase size={20} color={theme.colors.primary} />, text: 'Job Matching', desc: 'AI-driven matches' },
-        { icon: <Users size={20} color={theme.colors.primary} />, text: 'Linkup Feed', desc: 'Professional network' },
-        { icon: <Shield size={20} color={theme.colors.primary} />, text: 'Verified', desc: 'Secure profiles' },
+        { icon: <Briefcase size={20} color={theme.colors.primary} />, text: 'Job Matching', desc: 'AI-driven' },
+        { icon: <Sparkles size={20} color={theme.colors.primary} />, text: 'AI Assistant', desc: 'Chat with NexaBot' },
+        { icon: <Users size={20} color={theme.colors.primary} />, text: 'Linkup Feed', desc: 'Networking' },
     ];
 
     return (
