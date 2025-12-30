@@ -131,12 +131,12 @@ export default function AiChatScreen() {
 
             setMessages(prev => [...prev, aiMessage]);
         } catch (err: any) {
-            const errorMessage: Message = {
+            const aiMessage: Message = {
                 id: (Date.now() + 1).toString(),
                 role: 'assistant',
-                content: err.response?.data?.error || 'Sorry, I encountered an issue. Please try again.',
+                content: err.response?.data?.error || err.message || 'Sorry, I encountered an issue. Please try again.',
             };
-            setMessages(prev => [...prev, errorMessage]);
+            setMessages(prev => [...prev, aiMessage]);
         } finally {
             setSending(false);
         }
@@ -157,9 +157,9 @@ export default function AiChatScreen() {
                         </LinearGradient>
                     </View>
                 )}
-                
+
                 <View style={[
-                    styles.messageBubble, 
+                    styles.messageBubble,
                     isUser ? styles.userBubble : styles.aiBubble,
                     !isUser && { borderTopLeftRadius: 4 },
                     isUser && { borderTopRightRadius: 4 }
