@@ -119,6 +119,10 @@ Route::middleware('auth:api')->group(function () {
     Route::get('companies/{id}', [CompanyController::class, 'show']);
     Route::put('companies/{company}', [CompanyController::class, 'update']);
     Route::delete('companies/{company}', [CompanyController::class, 'destroy']);
+
+    // AI Assistant Routes
+    Route::get('ai/config', [\App\Http\Controllers\Api\AiController::class, 'config']);
+    Route::post('ai/chat', [\App\Http\Controllers\Api\AiController::class, 'chat']);
 });
 
 
