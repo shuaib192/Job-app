@@ -49,7 +49,7 @@ export default function ChatScreen() {
 
     const fetchOtherUser = async () => {
         try {
-            const response = await client.get(`/profile/${user_id}`);
+            const response = await client.get(`/users/${user_id}/profile`);
             // The profile endpoint might return data nested in different ways depending on API design
             // Common patterns: response.data or response.data.user
             const userData = response.data?.user || response.data;
