@@ -76,7 +76,8 @@ class AiController extends Controller
             ]);
         } catch (\Exception $e) {
             \Log::error('AI Chat Error: ' . $e->getMessage());
-            return response()->json(['error' => 'Sorry, I encountered an issue. Please try again later.'], 500);
+            // Return more descriptive error for debugging
+            return response()->json(['error' => 'AI Error: ' . $e->getMessage()], 500);
         }
     }
 
