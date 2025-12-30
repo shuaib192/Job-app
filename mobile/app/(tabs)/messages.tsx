@@ -4,16 +4,25 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { theme } from '../../src/theme';
 import client from '../../src/api/client';
-import { MessageSquare, Search } from 'lucide-react-native';
+import { MessageSquare, Search, Sparkles } from 'lucide-react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+
+interface AiConfig {
+    enabled: boolean;
+    name: string;
+    greeting: string;
+}
 
 export default function MessagesScreen() {
     const router = useRouter();
     const [conversations, setConversations] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
+    const [aiConfig, setAiConfig] = useState<AiConfig | null>(null);
 
     useEffect(() => {
         fetchConversations();
+        fetchAiConfig();
         const interval = setInterval(fetchConversations, 15000);
         return () => clearInterval(interval);
     }, []);
@@ -31,6 +40,17 @@ export default function MessagesScreen() {
         }
     };
 
+    const fetchAiConfig = async () => {
+        try {
+            const response = await client.get('/ai/config');
+            if (response.data?.enabled) {
+                setAiConfig(response.data);
+            }
+        } catch (err) {
+            console.log('AI config fetch error:', err);
+        }
+    };
+
     const onRefresh = () => {
         setRefreshing(true);
         fetchConversations();
@@ -45,6 +65,39 @@ export default function MessagesScreen() {
         if (diffHours < 1) return 'Just now';
         if (diffHours < 24) return `${diffHours}h`;
         return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    };
+
+    const renderAiContact = () => {
+        if (!aiConfig?.enabled) return null;
+
+        return (
+            <TouchableOpacity
+                style={styles.aiContactCard}
+                onPress={() => router.push('/messages/ai')}
+                activeOpacity={0.8}
+            >
+                <LinearGradient
+                    colors={['#8B5CF6', '#6366F1']}
+                    style={styles.aiAvatar}
+                >
+                    <Sparkles size={22} color="#fff" />
+                </LinearGradient>
+                <View style={styles.conversationInfo}>
+                    <View style={styles.conversationHeader}>
+                        <View style={styles.aiNameRow}>
+                            <Text style={styles.aiUserName}>{aiConfig.name || 'NexaBot'}</Text>
+                            <View style={styles.aiTag}>
+                                <Text style={styles.aiTagText}>AI</Text>
+                            </View>
+                        </View>
+                        <Text style={styles.timeText}>Online</Text>
+                    </View>
+                    <Text style={styles.lastMessage} numberOfLines={1}>
+                        Tap to chat with your AI career assistant ✨
+                    </Text>
+                </View>
+            </TouchableOpacity>
+        );
     };
 
     const renderConversation = ({ item }: { item: any }) => {
@@ -128,6 +181,7 @@ export default function MessagesScreen() {
                         tintColor={theme.colors.primary}
                     />
                 }
+                ListHeaderComponent={renderAiContact}
                 ListEmptyComponent={renderEmptyState}
                 showsVerticalScrollIndicator={false}
             />
@@ -268,5 +322,44 @@ const styles = StyleSheet.create({
         ...theme.typography.body,
         color: theme.colors.textSecondary,
         textAlign: 'center',
+    },
+    // AI Contact Styles
+    aiContactCard: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#F5F3FF',
+        borderRadius: theme.borderRadius.lg,
+        padding: theme.spacing.md,
+        marginBottom: theme.spacing.md,
+        borderWidth: 1,
+        borderColor: '#DDD6FE',
+    },
+    aiAvatar: {
+        width: 52,
+        height: 52,
+        borderRadius: 26,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    aiNameRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+    },
+    aiUserName: {
+        ...theme.typography.bodySemibold,
+        color: '#6366F1',
+        fontWeight: '700',
+    },
+    aiTag: {
+        backgroundColor: '#6366F1',
+        paddingHorizontal: 8,
+        paddingVertical: 2,
+        borderRadius: 10,
+    },
+    aiTagText: {
+        color: '#fff',
+        fontSize: 10,
+        fontWeight: '800',
     },
 });
