@@ -228,7 +228,17 @@ class AiController extends Controller
 
         if (!$response->successful()) {
             \Log::error('Groq API Error: ' . $response->body());
-            throw new \Exception('Groq API error: ' . $response->status());
+            $status = $response->status();
+            
+            if ($status === 401) {
+                throw new \Exception('Invalid Groq API Key (Error 401). Please check your Groq API key in the Admin Panel.');
+            }
+            
+            if ($status === 413) {
+                throw new \Exception('Message Too Large (Error 413). Please shorten your message and try again.');
+            }
+            
+            throw new \Exception('Groq API error: ' . $status);
         }
 
         $data = $response->json();
