@@ -6,15 +6,20 @@ import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import { Platform } from 'react-native';
 
-Notifications.setNotificationHandler({
-    handleNotification: async () => ({
-        shouldShowAlert: true,
-        shouldPlaySound: true,
-        shouldSetBadge: true,
-        shouldShowBanner: true,
-        shouldShowList: true,
-    }),
-});
+// Safely setup notification handler for Expo SDK 53 compatibility
+try {
+    Notifications.setNotificationHandler({
+        handleNotification: async () => ({
+            shouldShowAlert: true,
+            shouldPlaySound: true,
+            shouldSetBadge: true,
+            shouldShowBanner: true,
+            shouldShowList: true,
+        }),
+    });
+} catch (e) {
+    console.log('Notifications Info: Setup skipped (Native support missing in this environment)');
+}
 
 interface NotificationContextType {
     unreadCount: number;
@@ -44,6 +49,12 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
         }
 
         try {
+            // SDK 53 Check: expo-notifications is removed from Expo Go on Android
+            if (Platform.OS === 'android' && Constants.appOwnership === 'expo') {
+                console.log('Push Info: Android notifications require a Development Build (skipping in Expo Go).');
+                return;
+            }
+
             const { status: existingStatus } = await Notifications.getPermissionsAsync();
             let finalStatus = existingStatus;
             if (existingStatus !== 'granted') {
@@ -63,11 +74,6 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
                 return;
             }
 
-            if (Platform.OS === 'android' && Constants.appOwnership === 'expo') {
-                console.log('Push Info: Android notifications require a Development Build (not Expo Go).');
-                return;
-            }
-
             console.log('Attempting to fetch Expo Push Token...');
             const tokenData = await Notifications.getExpoPushTokenAsync({
                 projectId: projectId
@@ -78,7 +84,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
             await client.post('/auth/push-token', { token: pushToken });
         } catch (err: any) {
-            console.log('Push Registration Info:', err.message);
+            console.log('Push Registration Info (Safe Catch):', err.message);
         }
     };
 
