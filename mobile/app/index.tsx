@@ -22,7 +22,7 @@ export default function WelcomeScreen() {
             <StatusBar barStyle="light-content" />
 
             <ImageBackground
-                source={require('../assets/welcome-bg.png')}
+                source={require('../assets/welcome_bg.png')}
                 style={styles.backgroundImage}
                 resizeMode="cover"
             >
