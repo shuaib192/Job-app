@@ -292,23 +292,37 @@ export default function ChatScreen() {
                                 </TouchableOpacity>
                             )}
                             {item.file_url && item.file_url.length > 0 && (
-                                <TouchableOpacity
-                                    style={styles.fileContainer}
-                                    onPress={() => {
-                                        if (item.file_url) {
-                                            Linking.openURL(item.file_url).catch(() => {
-                                                Alert.alert('Error', 'Cannot open this file');
-                                            });
-                                        }
-                                    }}
-                                >
-                                    <FileText size={24} color={isMe ? theme.colors.white : theme.colors.primary} />
-                                    <View style={styles.fileInfo}>
-                                        <Text style={[styles.fileText, isMe && { color: theme.colors.white }]}>Document</Text>
-                                        <Text style={[styles.fileTap, isMe && { color: 'rgba(255,255,255,0.7)' }]}>Tap to download</Text>
+                                item.type === 'audio' ? (
+                                    <View style={styles.voiceMessageContainer}>
+                                        <View style={[styles.playButton, isMe && styles.myPlayButton]}>
+                                            <TouchableOpacity onPress={() => {/* Handle play */ }}>
+                                                <View style={{ width: 12, height: 12, backgroundColor: isMe ? theme.colors.primary : '#fff', transform: [{ rotate: '45deg' }], marginLeft: 4 }} />
+                                            </TouchableOpacity>
+                                        </View>
+                                        <View style={[styles.waveformContainer, isMe && styles.myWaveformContainer]}>
+                                            <View style={[styles.waveformProgress, { width: '40%' }]} />
+                                        </View>
+                                        <Text style={[styles.timeText, isMe ? styles.myTimeText : styles.theirTimeText, { alignSelf: 'flex-end', marginTop: 10 }]}>0:12</Text>
                                     </View>
-                                    <Download size={16} color={isMe ? 'rgba(255,255,255,0.7)' : theme.colors.textMuted} />
-                                </TouchableOpacity>
+                                ) : (
+                                    <TouchableOpacity
+                                        style={styles.fileContainer}
+                                        onPress={() => {
+                                            if (item.file_url) {
+                                                Linking.openURL(item.file_url).catch(() => {
+                                                    Alert.alert('Error', 'Cannot open this file');
+                                                });
+                                            }
+                                        }}
+                                    >
+                                        <FileText size={24} color={isMe ? theme.colors.white : theme.colors.primary} />
+                                        <View style={styles.fileInfo}>
+                                            <Text style={[styles.fileText, isMe && { color: theme.colors.white }]}>Document</Text>
+                                            <Text style={[styles.fileTap, isMe && { color: 'rgba(255,255,255,0.7)' }]}>Tap to download</Text>
+                                        </View>
+                                        <Download size={16} color={isMe ? 'rgba(255,255,255,0.7)' : theme.colors.textMuted} />
+                                    </TouchableOpacity>
+                                )
                             )}
                             {item.message && item.message.length > 0 && (
                                 <Text style={[styles.messageText, isMe ? styles.myMessageText : styles.theirMessageText]}>
