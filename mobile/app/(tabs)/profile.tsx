@@ -8,6 +8,12 @@ import client from '../../src/api/client';
 import { LogOut, MapPin, Briefcase, Mail, Edit, Settings, Plus, GraduationCap, Camera, Sparkles } from 'lucide-react-native';
 import * as ImagePicker from 'expo-image-picker';
 
+interface AiConfig {
+    enabled: boolean;
+    name: string;
+    greeting: string;
+}
+
 export default function ProfileScreen() {
     const { user, updateUser, logout } = useAuth();
     const router = useRouter();
@@ -17,6 +23,7 @@ export default function ProfileScreen() {
     const [uploadingAvatar, setUploadingAvatar] = useState(false);
     const [gallery, setGallery] = useState<any[]>([]);
     const [uploadingGallery, setUploadingGallery] = useState(false);
+    const [aiConfig, setAiConfig] = useState<AiConfig | null>(null);
 
     const pickProfileImage = async () => {
         const result = await ImagePicker.launchImageLibraryAsync({
@@ -52,7 +59,17 @@ export default function ProfileScreen() {
     useEffect(() => {
         fetchProfile();
         fetchGallery();
+        fetchAiConfig();
     }, []);
+
+    const fetchAiConfig = async () => {
+        try {
+            const response = await client.get('/ai/config');
+            setAiConfig(response.data);
+        } catch (err) {
+            console.log('AI config fetch error:', err);
+        }
+    };
 
     const fetchGallery = async () => {
         try {
@@ -244,16 +261,18 @@ export default function ProfileScreen() {
                         </View>
                     </View>
 
-                    <TouchableOpacity
-                        style={styles.aiOptimizeBtn}
-                        onPress={() => router.push({
-                            pathname: '/messages/ai',
-                            params: { prompt: `Hi ${config?.name || 'NexaBot'}! Can you look at my profile (Bio: ${profile?.profile?.bio || 'None'}, Skills: ${profile?.profile?.skills?.join(', ') || 'None'}) and suggest how I can improve it to get more job offers?` }
-                        })}
-                    >
-                        <Sparkles size={18} color="#fff" />
-                        <Text style={styles.aiOptimizeText}>Optimize with AI</Text>
-                    </TouchableOpacity>
+                    {aiConfig?.enabled && (
+                        <TouchableOpacity
+                            style={styles.aiOptimizeBtn}
+                            onPress={() => router.push({
+                                pathname: '/messages/ai',
+                                params: { prompt: `Hi ${aiConfig.name || 'NexaBot'}! Can you look at my profile (Bio: ${profile?.profile?.bio || 'None'}, Skills: ${profile?.profile?.skills?.join(', ') || 'None'}) and suggest how I can improve it to get more job offers?` }
+                            })}
+                        >
+                            <Sparkles size={18} color="#fff" />
+                            <Text style={styles.aiOptimizeText}>Optimize with AI</Text>
+                        </TouchableOpacity>
+                    )}
                 </View>
 
                 {/* Gallery Section */}
