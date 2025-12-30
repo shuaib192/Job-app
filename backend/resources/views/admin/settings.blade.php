@@ -161,7 +161,7 @@
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 ml-1">Greeting Message</label>
-                            <input type="text" name="ai_greeting" value="{{ $settings['ai_greeting'] ?? 'Hi! I\\'m NexaBot, your personal career assistant. How can I help you today?' }}" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-violet-500 outline-none transition-all">
+                            <input type="text" name="ai_greeting" value="{{ $settings['ai_greeting'] ?? 'Hi! I am NexaBot, your personal career assistant. How can I help you today?' }}" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-violet-500 outline-none transition-all">
                         </div>
                     </div>
 
