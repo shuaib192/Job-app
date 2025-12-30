@@ -72,6 +72,7 @@ const TypingIndicator = () => {
 
 export default function AiChatScreen() {
     const router = useRouter();
+    const { prompt } = useLocalSearchParams();
     const { user } = useAuth();
     const [config, setConfig] = useState<AiConfig | null>(null);
     const [messages, setMessages] = useState<Message[]>([]);
@@ -83,6 +84,12 @@ export default function AiChatScreen() {
     useEffect(() => {
         fetchConfig();
     }, []);
+
+    useEffect(() => {
+        if (prompt && !loading && config?.enabled && messages.length === 0) {
+            sendMessage(prompt as string);
+        }
+    }, [prompt, loading, config]);
 
     const fetchConfig = async () => {
         try {

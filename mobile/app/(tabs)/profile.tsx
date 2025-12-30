@@ -5,7 +5,7 @@ import { useRouter } from 'expo-router';
 import { theme } from '../../src/theme';
 import { useAuth } from '../../src/store/AuthContext';
 import client from '../../src/api/client';
-import { LogOut, MapPin, Briefcase, Mail, Edit, Settings, Plus, GraduationCap, Camera } from 'lucide-react-native';
+import { LogOut, MapPin, Briefcase, Mail, Edit, Settings, Plus, GraduationCap, Camera, Sparkles } from 'lucide-react-native';
 import * as ImagePicker from 'expo-image-picker';
 
 export default function ProfileScreen() {
@@ -243,6 +243,17 @@ export default function ProfileScreen() {
                             <Text style={styles.statLabel}>Role</Text>
                         </View>
                     </View>
+
+                    <TouchableOpacity
+                        style={styles.aiOptimizeBtn}
+                        onPress={() => router.push({
+                            pathname: '/messages/ai',
+                            params: { prompt: `Hi ${config?.name || 'NexaBot'}! Can you look at my profile (Bio: ${profile?.profile?.bio || 'None'}, Skills: ${profile?.profile?.skills?.join(', ') || 'None'}) and suggest how I can improve it to get more job offers?` }
+                        })}
+                    >
+                        <Sparkles size={18} color="#fff" />
+                        <Text style={styles.aiOptimizeText}>Optimize with AI</Text>
+                    </TouchableOpacity>
                 </View>
 
                 {/* Gallery Section */}
@@ -586,5 +597,22 @@ const styles = StyleSheet.create({
         borderRadius: 11,
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    aiOptimizeBtn: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#8B5CF6',
+        paddingVertical: 10,
+        paddingHorizontal: 16,
+        borderRadius: 12,
+        marginTop: 15,
+        gap: 8,
+        ...theme.shadows.sm,
+    },
+    aiOptimizeText: {
+        color: '#fff',
+        fontSize: 14,
+        fontWeight: '700',
     },
 });

@@ -4,7 +4,7 @@ import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { theme } from '../../src/theme';
 import client from '../../src/api/client';
-import { MapPin, Briefcase, DollarSign, Clock, ArrowLeft, Share2, Bookmark, CheckCircle, Trash2, Users } from 'lucide-react-native';
+import { MapPin, Briefcase, DollarSign, Clock, ArrowLeft, Share2, Bookmark, CheckCircle, Trash2, Users, Sparkles } from 'lucide-react-native';
 import { useAuth } from '../../src/store/AuthContext';
 
 export default function JobDetailsScreen() {
@@ -198,13 +198,22 @@ export default function JobDetailsScreen() {
 
             {/* Bottom Action */}
             <View style={styles.footer}>
+                <TouchableOpacity
+                    style={styles.aiHelpButton}
+                    onPress={() => router.push({
+                        pathname: '/messages/ai',
+                        params: { prompt: `Tell me more about this ${job.title} position at ${job.company?.name || job.employer?.name}. What are the key skills needed?` }
+                    })}
+                >
+                    <Sparkles size={22} color={theme.colors.primary} />
+                </TouchableOpacity>
+
                 {user?.id === job.employer_id ? (
                     <TouchableOpacity
                         style={[styles.applyButton, { backgroundColor: theme.colors.surfaceAlt, borderWidth: 1, borderColor: theme.colors.primary }]}
                         onPress={() => router.push(`/job/applications/${job.id}`)}
                     >
                         <View style={styles.row}>
-                            {/* Import Users icon first, assuming I'll add it to imports next */}
                             <Text style={[styles.applyButtonText, { color: theme.colors.primary }]}>View Applicants</Text>
                         </View>
                     </TouchableOpacity>
@@ -248,6 +257,33 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingHorizontal: theme.spacing.md,
         paddingVertical: theme.spacing.sm,
+    },
+    footer: {
+        flexDirection: 'row',
+        padding: theme.spacing.md,
+        backgroundColor: theme.colors.surface,
+        borderTopWidth: 1,
+        borderTopColor: theme.colors.border,
+        alignItems: 'center',
+        gap: theme.spacing.md,
+    },
+    aiHelpButton: {
+        width: 48,
+        height: 48,
+        borderRadius: 24,
+        backgroundColor: '#F5F3FF',
+        borderWidth: 1,
+        borderColor: '#DDD6FE',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    applyButton: {
+        flex: 1,
+        height: 54,
+        borderRadius: theme.borderRadius.lg,
+        backgroundColor: theme.colors.primary,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     headerActions: {
         flexDirection: 'row',
