@@ -40,29 +40,36 @@ export default function ChatScreen() {
 
     useEffect(() => {
         fetchMessages();
+        fetchOtherUser();
 
         // Polling for new messages every 8 seconds to stay within rate limits
         const interval = setInterval(fetchMessages, 8000);
         return () => clearInterval(interval);
     }, [user_id]);
 
+    const fetchOtherUser = async () => {
+        try {
+            const response = await client.get(`/profile/${user_id}`);
+            // The profile endpoint might return data nested in different ways depending on API design
+            // Common patterns: response.data or response.data.user
+            const userData = response.data?.user || response.data;
+            if (userData) {
+                setOtherUser(userData);
+            }
+        } catch (err) {
+            console.log('Other user fetch error:', err);
+        }
+    };
+
     const fetchMessages = async () => {
         try {
             const response = await client.get(`/messages/${user_id}`);
             const msgs = response.data || [];
 
+            // Messages from API are oldest first, keep that order for chat display
             if (msgs.length !== messages.length || loading) {
-                // Messages from API are oldest first, keep that order for chat display
                 setMessages(msgs);
-
-                // Trigger global refresh to update badges
                 refreshNotifications();
-            }
-
-            // Get other user info from first message
-            if (msgs.length > 0 && !otherUser) {
-                const firstMsg = msgs[0];
-                setOtherUser(firstMsg.sender_id == user_id ? firstMsg.sender : firstMsg.receiver);
             }
         } catch (err) {
             console.log('Messages fetch error:', err);
