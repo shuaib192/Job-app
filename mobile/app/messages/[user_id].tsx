@@ -263,25 +263,35 @@ export default function ChatScreen() {
                 onLongPress={() => handleLongPress(item)}
                 delayLongPress={300}
             >
-                <View style={[styles.messageContainer, isMe ? styles.myMessageContainer : styles.theirMessageContainer]}>
-                    <View style={[styles.messageBubble, isMe ? styles.myBubble : styles.theirBubble]}>
-                        {item.image && item.image.length > 0 && (
-                            <TouchableOpacity
-                                onPress={() => {
-                                    setViewerImages([item.image]);
-                                    setViewerVisible(true);
-                                }}
-                            >
-                                <RNImage source={{ uri: item.image }} style={styles.messageImage} resizeMode="cover" />
-                                <View style={styles.imageOverlay}>
-                                    <Text style={styles.tapToView}>Tap to view</Text>
-                                </View>
-                            </TouchableOpacity>
+                <View style={[styles.messageRow, isMe ? styles.myMessageRow : styles.theirMessageRow]}>
+                    <View style={styles.messageContentContainer}>
+                        {!isMe && (
+                            <View style={styles.bubbleAvatarContainer}>
+                                {otherUser?.avatar ? (
+                                    <RNImage source={{ uri: otherUser.avatar }} style={styles.bubbleAvatar} />
+                                ) : (
+                                    <View style={styles.bubbleAvatarPlaceholder}>
+                                        <Text style={styles.bubbleAvatarText}>{otherUser?.name?.[0] || '?'}</Text>
+                                    </View>
+                                )}
+                            </View>
                         )}
-                        {item.file_url && item.file_url.length > 0 && (
-                            item.type === 'audio' ? (
-                                <VoiceMessage uri={item.file_url} isMe={isMe} />
-                            ) : (
+
+                        <View style={[styles.messageBubble, isMe ? styles.myBubble : styles.theirBubble]}>
+                            {item.image && item.image.length > 0 && (
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        setViewerImages([item.image]);
+                                        setViewerVisible(true);
+                                    }}
+                                >
+                                    <RNImage source={{ uri: item.image }} style={styles.messageImage} resizeMode="cover" />
+                                    <View style={styles.imageOverlay}>
+                                        <Text style={styles.tapToView}>Tap to view</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            )}
+                            {item.file_url && item.file_url.length > 0 && (
                                 <TouchableOpacity
                                     style={styles.fileContainer}
                                     onPress={() => {
@@ -299,23 +309,35 @@ export default function ChatScreen() {
                                     </View>
                                     <Download size={16} color={isMe ? 'rgba(255,255,255,0.7)' : theme.colors.textMuted} />
                                 </TouchableOpacity>
-                            )
-                        )}
-                        {item.message && item.message.length > 0 && (
-                            <Text style={[styles.messageText, isMe ? styles.myMessageText : styles.theirMessageText]}>
-                                {item.message}
-                            </Text>
-                        )}
-                        <View style={styles.messageFooter}>
-                            <Text style={[styles.timeText, isMe ? styles.myTimeText : styles.theirTimeText]}>
-                                {formatTime(item.created_at)}
-                            </Text>
-                            {isMe && (
-                                <Text style={[styles.statusText, item.is_read && styles.statusRead]}>
-                                    {getStatusText()}
+                            )}
+                            {item.message && item.message.length > 0 && (
+                                <Text style={[styles.messageText, isMe ? styles.myMessageText : styles.theirMessageText]}>
+                                    {item.message}
                                 </Text>
                             )}
+                            <View style={styles.messageFooter}>
+                                <Text style={[styles.timeText, isMe ? styles.myTimeText : styles.theirTimeText]}>
+                                    {formatTime(item.created_at)}
+                                </Text>
+                                {isMe && (
+                                    <Text style={[styles.statusText, item.is_read && styles.statusRead]}>
+                                        {getStatusText()}
+                                    </Text>
+                                )}
+                            </View>
                         </View>
+
+                        {isMe && (
+                            <View style={styles.bubbleAvatarContainer}>
+                                {user?.avatar ? (
+                                    <RNImage source={{ uri: user.avatar }} style={styles.bubbleAvatar} />
+                                ) : (
+                                    <View style={[styles.bubbleAvatarPlaceholder, { backgroundColor: theme.colors.primary }]}>
+                                        <Text style={[styles.bubbleAvatarText, { color: '#fff' }]}>{user?.name?.[0] || '?'}</Text>
+                                    </View>
+                                )}
+                            </View>
+                        )}
                     </View>
                 </View>
             </TouchableOpacity>
@@ -510,21 +532,51 @@ const styles = StyleSheet.create({
     },
     messagesList: {
         padding: theme.spacing.md,
-        flexGrow: 1,
+        paddingBottom: 20,
     },
-    messageContainer: {
-        marginBottom: theme.spacing.sm,
+    messageRow: {
+        flexDirection: 'row',
+        marginBottom: 16,
     },
-    myMessageContainer: {
+    myMessageRow: {
+        justifyContent: 'flex-end',
+    },
+    theirMessageRow: {
+        justifyContent: 'flex-start',
+    },
+    messageContentContainer: {
+        flexDirection: 'row',
         alignItems: 'flex-end',
+        maxWidth: '85%',
     },
-    theirMessageContainer: {
-        alignItems: 'flex-start',
+    bubbleAvatarContainer: {
+        width: 30,
+        height: 30,
+        borderRadius: 15,
+        marginHorizontal: 8,
+        overflow: 'hidden',
+    },
+    bubbleAvatar: {
+        width: 30,
+        height: 30,
+    },
+    bubbleAvatarPlaceholder: {
+        width: 30,
+        height: 30,
+        borderRadius: 15,
+        backgroundColor: '#E2E8F0',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    bubbleAvatarText: {
+        fontSize: 12,
+        fontWeight: 'bold',
+        color: '#64748B',
     },
     messageBubble: {
-        maxWidth: '80%',
+        flex: 1,
         padding: theme.spacing.md,
-        borderRadius: theme.borderRadius.lg,
+        borderRadius: 20,
     },
     myBubble: {
         backgroundColor: theme.colors.primary,
@@ -534,6 +586,8 @@ const styles = StyleSheet.create({
         backgroundColor: theme.colors.surface,
         borderBottomLeftRadius: 4,
         ...theme.shadows.sm,
+        borderWidth: 1,
+        borderColor: '#F1F5F9',
     },
     messageText: {
         ...theme.typography.body,

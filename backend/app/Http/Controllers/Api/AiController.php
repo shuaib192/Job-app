@@ -54,12 +54,12 @@ class AiController extends Controller
         }
 
         $provider = SystemSetting::get('ai_provider', 'gemini');
-        $model = SystemSetting::get('ai_model', 'gemini-2.5-flash-preview-05-20');
+        $model = SystemSetting::get('ai_model', 'gemini-1.5-flash');
         $apiKey = SystemSetting::get('ai_api_key');
         $systemPrompt = SystemSetting::get('ai_system_prompt', $this->getDefaultSystemPrompt());
 
         if (empty($apiKey)) {
-            return response()->json(['error' => 'AI API key not configured. Please contact support.'], 500);
+            return response()->json(['error' => 'AI API key is missing. Please set it in Admin Settings.'], 500);
         }
 
         try {

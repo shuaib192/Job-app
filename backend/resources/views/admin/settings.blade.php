@@ -134,10 +134,9 @@
                             <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 ml-1">AI Model</label>
                             <select name="ai_model" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-violet-500 outline-none transition-all">
                                 <optgroup label="Google Gemini">
-                                    <option value="gemini-2.5-flash-preview-05-20" {{ ($settings['ai_model'] ?? 'gemini-2.5-flash-preview-05-20') == 'gemini-2.5-flash-preview-05-20' ? 'selected' : '' }}>Gemini 2.5 Flash (Recommended)</option>
-                                    <option value="gemini-2.0-flash" {{ ($settings['ai_model'] ?? '') == 'gemini-2.0-flash' ? 'selected' : '' }}>Gemini 2.0 Flash</option>
+                                    <option value="gemini-1.5-flash" {{ ($settings['ai_model'] ?? 'gemini-1.5-flash') == 'gemini-1.5-flash' ? 'selected' : '' }}>Gemini 1.5 Flash (Recommended)</option>
                                     <option value="gemini-1.5-pro" {{ ($settings['ai_model'] ?? '') == 'gemini-1.5-pro' ? 'selected' : '' }}>Gemini 1.5 Pro</option>
-                                    <option value="gemini-1.5-flash" {{ ($settings['ai_model'] ?? '') == 'gemini-1.5-flash' ? 'selected' : '' }}>Gemini 1.5 Flash</option>
+                                    <option value="gemini-2.0-flash-exp" {{ ($settings['ai_model'] ?? '') == 'gemini-2.0-flash-exp' ? 'selected' : '' }}>Gemini 2.0 Flash (Experimental)</option>
                                 </optgroup>
                                 <optgroup label="OpenAI">
                                     <option value="gpt-4o" {{ ($settings['ai_model'] ?? '') == 'gpt-4o' ? 'selected' : '' }}>GPT-4o</option>

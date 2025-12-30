@@ -352,19 +352,7 @@ export default function JobsScreen() {
                     </TouchableOpacity>
                 )}
 
-                {/* AI Assistant FAB */}
-                <TouchableOpacity
-                    style={styles.aiFab}
-                    onPress={() => router.push('/ai')}
-                    activeOpacity={0.9}
-                >
-                    <LinearGradient
-                        colors={['#8B5CF6', '#6366F1']}
-                        style={styles.aiFabGradient}
-                    >
-                        <Sparkles size={24} color="#fff" />
-                    </LinearGradient>
-                </TouchableOpacity>
+                )}
             </SafeAreaView>
         </View>
     );
@@ -448,22 +436,5 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         ...theme.shadows.md,
         zIndex: 100,
-    },
-    aiFab: {
-        position: 'absolute',
-        bottom: 100,
-        right: 20,
-        width: 56,
-        height: 56,
-        borderRadius: 28,
-        overflow: 'hidden',
-        ...theme.shadows.lg,
-        zIndex: 100,
-    },
-    aiFabGradient: {
-        width: '100%',
-        height: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
     },
 });
