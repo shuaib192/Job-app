@@ -14,7 +14,7 @@ import {
     Animated,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter, Stack } from 'expo-router';
+import { useRouter, Stack, useLocalSearchParams } from 'expo-router';
 import { theme } from '../../src/theme';
 import client from '../../src/api/client';
 import { ArrowLeft, Send, Sparkles, Bot, User, Zap, RefreshCw } from 'lucide-react-native';
@@ -146,7 +146,7 @@ export default function AiChatScreen() {
         const isUser = item.role === 'user';
 
         return (
-            <View style={[styles.messageRow, isUser && styles.messageRowUser]}>
+            <View style={[styles.messageRow, isUser ? styles.messageRowUser : styles.messageRowAi]}>
                 {!isUser && (
                     <View style={styles.aiAvatar}>
                         <LinearGradient
@@ -157,17 +157,26 @@ export default function AiChatScreen() {
                         </LinearGradient>
                     </View>
                 )}
-                <View style={[styles.messageBubble, isUser ? styles.userBubble : styles.aiBubble]}>
+                
+                <View style={[
+                    styles.messageBubble, 
+                    isUser ? styles.userBubble : styles.aiBubble,
+                    !isUser && { borderTopLeftRadius: 4 },
+                    isUser && { borderTopRightRadius: 4 }
+                ]}>
                     <Text style={[styles.messageText, isUser && styles.userMessageText]}>
                         {item.content}
                     </Text>
                 </View>
+
                 {isUser && (
                     <View style={styles.userAvatar}>
                         {user?.avatar ? (
                             <RNImage source={{ uri: user.avatar }} style={styles.userAvatarImage} />
                         ) : (
-                            <Text style={styles.userAvatarText}>{user?.name?.[0] || 'U'}</Text>
+                            <View style={styles.userAvatarGradient}>
+                                <Text style={styles.userAvatarText}>{user?.name?.[0] || 'U'}</Text>
+                            </View>
                         )}
                     </View>
                 )}
@@ -460,12 +469,16 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginBottom: 16,
         alignItems: 'flex-end',
+        width: '100%',
+    },
+    messageRowAi: {
+        justifyContent: 'flex-start',
     },
     messageRowUser: {
         justifyContent: 'flex-end',
     },
     aiAvatar: {
-        marginRight: 10,
+        marginRight: 8,
     },
     aiAvatarGradient: {
         width: 32,
@@ -478,11 +491,16 @@ const styles = StyleSheet.create({
         width: 32,
         height: 32,
         borderRadius: 16,
+        marginLeft: 8,
+        overflow: 'hidden',
+    },
+    userAvatarGradient: {
+        width: 32,
+        height: 32,
+        borderRadius: 16,
         backgroundColor: theme.colors.primary,
         justifyContent: 'center',
         alignItems: 'center',
-        marginLeft: 10,
-        overflow: 'hidden',
     },
     userAvatarImage: {
         width: 32,
@@ -495,19 +513,21 @@ const styles = StyleSheet.create({
         fontSize: 14,
     },
     messageBubble: {
-        maxWidth: width * 0.7,
+        maxWidth: width * 0.75,
         padding: 14,
-        borderRadius: 20,
+        borderRadius: 18,
+        flexShrink: 1,
     },
     aiBubble: {
         backgroundColor: '#fff',
-        borderBottomLeftRadius: 6,
+        borderBottomLeftRadius: 4,
         borderWidth: 1,
         borderColor: '#E2E8F0',
+        ...theme.shadows.sm,
     },
     userBubble: {
         backgroundColor: theme.colors.primary,
-        borderBottomRightRadius: 6,
+        borderBottomRightRadius: 4,
     },
     messageText: {
         fontSize: 15,

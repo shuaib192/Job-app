@@ -351,8 +351,6 @@ export default function JobsScreen() {
                         <ChevronUp size={24} color={theme.colors.white} />
                     </TouchableOpacity>
                 )}
-
-                )}
             </SafeAreaView>
         </View>
     );
