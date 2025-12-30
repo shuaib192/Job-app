@@ -128,6 +128,7 @@
                                 <option value="gemini" {{ ($settings['ai_provider'] ?? 'gemini') == 'gemini' ? 'selected' : '' }}>Google Gemini</option>
                                 <option value="openai" {{ ($settings['ai_provider'] ?? '') == 'openai' ? 'selected' : '' }}>OpenAI (GPT)</option>
                                 <option value="groq" {{ ($settings['ai_provider'] ?? '') == 'groq' ? 'selected' : '' }}>Groq (Llama/Mixtral)</option>
+                                <option value="deepseek" {{ ($settings['ai_provider'] ?? '') == 'deepseek' ? 'selected' : '' }}>DeepSeek (Chat/Coder)</option>
                             </select>
                         </div>
                         <div>
@@ -147,12 +148,20 @@
                                     <option value="llama-3.3-70b-versatile" {{ ($settings['ai_model'] ?? '') == 'llama-3.3-70b-versatile' ? 'selected' : '' }}>Llama 3.3 70B</option>
                                     <option value="mixtral-8x7b-32768" {{ ($settings['ai_model'] ?? '') == 'mixtral-8x7b-32768' ? 'selected' : '' }}>Mixtral 8x7B</option>
                                 </optgroup>
+                                <optgroup label="DeepSeek">
+                                    <option value="deepseek-chat" {{ ($settings['ai_model'] ?? '') == 'deepseek-chat' ? 'selected' : '' }}>DeepSeek Chat</option>
+                                    <option value="deepseek-coder" {{ ($settings['ai_model'] ?? '') == 'deepseek-coder' ? 'selected' : '' }}>DeepSeek Coder</option>
+                                </optgroup>
                             </select>
                         </div>
                         <div class="md:col-span-2">
                             <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 ml-1">API Key</label>
-                            <input type="password" name="ai_api_key" value="{{ $settings['ai_api_key'] ?? '' }}" placeholder="Enter your API key (e.g., AIza...)" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-violet-500 outline-none transition-all font-mono">
-                            <p class="text-[10px] text-slate-400 mt-2 px-1 italic">Get your Gemini key from <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-violet-600 underline">Google AI Studio</a>.</p>
+                            <input type="password" name="ai_api_key" value="{{ $settings['ai_api_key'] ?? '' }}" placeholder="Enter your API key..." class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-violet-500 outline-none transition-all font-mono">
+                            <p class="text-[10px] text-slate-400 mt-2 px-1 italic">
+                                Keys: <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-violet-600 underline">Gemini</a>, 
+                                <a href="https://console.groq.com/keys" target="_blank" class="text-violet-600 underline">Groq</a>, 
+                                <a href="https://platform.deepseek.com/" target="_blank" class="text-violet-600 underline">DeepSeek</a>.
+                            </p>
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 ml-1">Assistant Name</label>

@@ -67,6 +67,7 @@ class AiController extends Controller
                 'gemini' => $this->callGemini($apiKey, $model, $systemPrompt, $request->message, $request->history ?? []),
                 'openai' => $this->callOpenAI($apiKey, $model, $systemPrompt, $request->message, $request->history ?? []),
                 'groq' => $this->callGroq($apiKey, $model, $systemPrompt, $request->message, $request->history ?? []),
+                'deepseek' => $this->callDeepSeek($apiKey, $model, $systemPrompt, $request->message, $request->history ?? []),
                 default => throw new \Exception('Unknown AI provider'),
             };
 
@@ -160,6 +161,40 @@ class AiController extends Controller
         if (!$response->successful()) {
             \Log::error('OpenAI API Error: ' . $response->body());
             throw new \Exception('OpenAI API error: ' . $response->status());
+        }
+
+        $data = $response->json();
+        return $data['choices'][0]['message']['content'] ?? 'I couldn\'t generate a response.';
+    }
+
+    private function callDeepSeek($apiKey, $model, $systemPrompt, $message, $history)
+    {
+        $messages = [
+            ['role' => 'system', 'content' => $systemPrompt],
+        ];
+
+        foreach ($history as $msg) {
+            $messages[] = [
+                'role' => $msg['role'],
+                'content' => $msg['content'],
+            ];
+        }
+
+        $messages[] = ['role' => 'user', 'content' => $message];
+
+        $response = Http::withHeaders([
+            'Authorization' => "Bearer {$apiKey}",
+            'Content-Type' => 'application/json',
+        ])->timeout(60)->post('https://api.deepseek.com/chat/completions', [
+            'model' => $model ?: 'deepseek-chat',
+            'messages' => $messages,
+            'temperature' => 0.7,
+            'max_tokens' => 1024,
+        ]);
+
+        if (!$response->successful()) {
+            \Log::error('DeepSeek API Error: ' . $response->body());
+            throw new \Exception('DeepSeek API error: ' . $response->status());
         }
 
         $data = $response->json();
